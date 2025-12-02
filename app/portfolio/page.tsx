@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Nav from "@/components/Nav";
 import NewPostStock from "@/components/newPostStock";
 import PortfolioDisplay from "@/components/PortfolioDisplay";
@@ -17,6 +17,21 @@ type StockData = {
 export default function BuildPortfolioPage() {
     const [addedStocks, setAddedStocks] = useState<StockData[]>([]);
     const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+    useEffect(() => {
+        const saved = localStorage.getItem("portfolioStocks");
+        if (saved) {
+            try {
+                setAddedStocks(JSON.parse(saved));
+            } catch {
+                console.error("Failed to load portfolio stocks");
+            }
+        }
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem("portfolioStocks", JSON.stringify(addedStocks));
+    },[addedStocks]);
 
     const handleStockAdded = (stock: StockData) => {
         setAddedStocks((prev) => [...prev, stock]);

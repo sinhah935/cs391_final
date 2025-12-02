@@ -47,9 +47,6 @@ export default function PostsDisplay({ inputs }: PortfolioDisplayProps) {
 
         </>
 
-
-
-
         // Add a button to go to the portfolio display (RESULTS)
     );
 }
