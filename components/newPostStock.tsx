@@ -101,7 +101,7 @@ export default function NewPostStock({ onStockAdded }: NewPostStockProps) {
 
     return (
         <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
-            <h2 className="text-2xl font-bold mb-6 text-gray-800">
+            <h2 className="text-2xl font-bold mb-6 text-[#452829]">
                 Add Stock to Portfolio
             </h2>
 
@@ -112,13 +112,13 @@ export default function NewPostStock({ onStockAdded }: NewPostStockProps) {
                     onChange={(e) => setSymbol(e.target.value.toUpperCase())}
                     onKeyPress={handleKeyPress}
                     placeholder="Enter stock symbol (e.g., AAPL)"
-                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#452829]"
                     disabled={isLoading || isPending}
                 />
                 <button
                     onClick={handleSearch}
                     disabled={isLoading || isPending}
-                    className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:bg-gray-400 "
+                    className="px-6 py-2 bg-[#452829] text-white rounded-lg hover:bg-[#5A0E24] disabled:bg-gray-400 "
                 >
                     {isLoading ? "Searching..." : "Search"}
                 </button>
@@ -136,15 +136,15 @@ export default function NewPostStock({ onStockAdded }: NewPostStockProps) {
                 <div className="border border-gray-200 rounded-lg p-6 mb-4 bg-gray-50">
                     <div className="flex justify-between items-start mb-4">
                         <div>
-                            <h3 className="text-3xl font-bold text-gray-900">
+                            <h3 className="text-3xl font-bold text-[#452829]">
                                 {stockData.symbol}
                             </h3>
-                            <p className="text-sm text-gray-500">
+                            <p className="text-sm text-[#452829]">
                                 Last Updated: {stockData.lastTradingDay}
                             </p>
                         </div>
                         <div className="text-right">
-                            <p className="text-3xl font-bold text-gray-900">
+                            <p className="text-3xl font-bold text-[#452829]">
                                 ${parseFloat(stockData.price).toFixed(2)}
                             </p>
                             <p
@@ -163,13 +163,13 @@ export default function NewPostStock({ onStockAdded }: NewPostStockProps) {
 
                     <div className="grid grid-cols-2 gap-4 mb-4">
                         <div className="bg-white p-3 rounded-lg">
-                            <p className="text-sm text-gray-600">Volume</p>
-                            <p className="text-lg font-semibold text-gray-900">
+                            <p className="text-sm text-[#452829]">Volume</p>
+                            <p className="text-lg font-semibold text-[#452829]">
                                 {parseInt(stockData.volume).toLocaleString()}
                             </p>
                         </div>
                         <div className="bg-white p-3 rounded-lg">
-                            <p className="text-sm text-gray-600">Change</p>
+                            <p className="text-sm text-[#452829]">Change</p>
                             <p
                                 className={`text-lg font-semibold ${
                                     parseFloat(stockData.change) >= 0
@@ -185,7 +185,7 @@ export default function NewPostStock({ onStockAdded }: NewPostStockProps) {
                     <button
                         onClick={handleAddToPortfolio}
                         disabled={isPending}
-                        className="w-full py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-semibold"
+                        className="w-full py-3 bg-[#452829] text-[#F3E8DF] rounded-lg hover:bg-[#5A0E24] disabled:bg-gray-400 disabled:cursor-not-allowed transition-colors font-semibold"
                     >
                         {isPending ? "Adding to Portfolio..." : "Add to Portfolio"}
                     </button>

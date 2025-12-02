@@ -25,23 +25,22 @@ export default function BuildPortfolioPage() {
     };
 
     return (
-        <div className="min-h-screen bg-gray-100">
-            <Nav />
+        <div className="min-h-screen bg-gradient-to-b from-[#F5E9E5] to-[#452829]">
 
             <div className="container mx-auto px-4 py-8">
                 <div className="mb-8 text-center">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-2">
+                    <h1 className="text-4xl font-bold text-[#452829] mb-2">
                         Build Your Portfolio
                     </h1>
-                    <p className="text-gray-600">
+                    <p className="text-[#E8D1C5]">
                         Search and add stocks to create your custom portfolio
                     </p>
                 </div>
 
                 {/* Success Message */}
                 {showSuccessMessage && (
-                    <div className="max-w-2xl mx-auto mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg">
-                        Stock successfully added to portfolio!
+                    <div className="max-w-2xl mx-auto mb-4 p-4 bg-[#F3E8DF] border border-[#F3E8DF] text-[#452829] rounded-lg">
+                        Stock Successfully Added To Portfolio!
                     </div>
                 )}
 
@@ -51,7 +50,7 @@ export default function BuildPortfolioPage() {
                 {/* Recently Added Stocks */}
                 {addedStocks.length > 0 && (
                     <div className="max-w-2xl mx-auto mt-8">
-                        <h3 className="text-xl font-semibold mb-4 text-gray-800">
+                        <h3 className="text-xl font-semibold mb-4 text-[#F3E8DF]">
                             Recently Added ({addedStocks.length})
                         </h3>
                         <div className="space-y-2">
@@ -62,7 +61,7 @@ export default function BuildPortfolioPage() {
                                 >
                                     <div>
                                         <span className="font-bold text-lg">{stock.symbol}</span>
-                                        <span className="text-gray-600 ml-2">
+                                        <span className="text-[#57595B] ml-2">
                                             ${parseFloat(stock.price).toFixed(2)}
                                         </span>
                                     </div>

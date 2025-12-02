@@ -40,10 +40,11 @@ export default function PostsDisplay({ inputs }: PortfolioDisplayProps) {
             </div>
 
             <button
-                onClick={() => router.push("/results")}
-                className="bg-blue-200">
+                className="mt-4 px-4 py-2 bg-white text-[#452829] font-medium rounded-lg border border-[#F3E8DF] shadow-sm hover:bg-[#d7b9ab] transition"
+                onClick={() => router.push("/results")}>
                 RESULTS
             </button>
+
         </>
 
 

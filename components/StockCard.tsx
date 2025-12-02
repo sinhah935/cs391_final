@@ -27,14 +27,14 @@ export default function StockCard({ stock }: StockCardProps) {
     // const latestDay = quote["07. latest trading day"];
 
     return (
-        <div className="border rounded-lg p-4 flex justify-between items-center shadow-sm mb-3">
+        <div className="border rounded-lg p-4 flex justify-between items-center shadow-sm mb-3 mt-4 border-[#F3E8DF]">
             <div>
                 <div className="flex items-baseline gap-2">
-                    <h2 className="text-lg font-semibold">{stock.symbol}</h2>
-                    <span className="text-sm text-gray-500">{stock.lastTradingDay}</span>
+                    <h2 className="text-lg font-semibold text-[#F3E8DF]">{stock.symbol}</h2>
+                    <span className="text-sm text-[#E8D1C5]">{stock.lastTradingDay}</span>
                 </div>
 
-                <div className="mt-1 text-sm text-gray-700">
+                <div className="mt-1 text-sm text-[#F3E8DF]">
                     <p>Price: ${stock.price}</p>
                     <p>Change: {stock.change} ({stock.changePercent})</p>
                     <p>Volume: {Number(stock.volume).toLocaleString()}</p>
