@@ -11,17 +11,46 @@ type StockData = {
     lastTradingDay: string;
 };
 
-type ResultDisplayProps = {
-    portfolio: StockData[];
-};
-
-export default function ResultDisplay({ portfolio }: ResultDisplayProps) {
+export default function ResultDisplay() {
+    const [portfolio, setPortfolio] = useState<StockData[]>([]);
     const [totalValue, setTotalValue] = useState(0);
     const [totalReturn, setTotalReturn] = useState(0);
     const [volatility, setVolatility] = useState(0);
     const [sharpeRatio, setSharpeRatio] = useState(0);
     const [diversificationScore, setDiversificationScore] = useState(0);
     const [maxDrawdown, setMaxDrawdown] = useState(0);
+
+    // Load portfolio from localStorage on mount and set up listener
+    useEffect(() => {
+        const loadPortfolio = () => {
+            const saved = localStorage.getItem("portfolioStocks");
+            if (saved) {
+                try {
+                    const stocks = JSON.parse(saved);
+                    setPortfolio(stocks);
+                } catch {
+                    console.error("Failed to load portfolio stocks");
+                    setPortfolio([]);
+                }
+            } else {
+                setPortfolio([]);
+            }
+        };
+
+        // Load initially
+        loadPortfolio();
+
+        // Listen for storage changes (in case updated from another tab)
+        window.addEventListener("storage", loadPortfolio);
+
+        // Set up interval to check for changes (for same-tab updates)
+        const interval = setInterval(loadPortfolio, 500);
+
+        return () => {
+            window.removeEventListener("storage", loadPortfolio);
+            clearInterval(interval);
+        };
+    }, []);
 
     useEffect(() => {
         if (portfolio.length > 0) {
