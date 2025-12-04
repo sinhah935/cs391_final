@@ -17,8 +17,8 @@ export async function addStockToPortfolio(stock: StockData) {
     // The client-side already handles preventing duplicates
     portfolio.push(stock);
     return { success: true, portfolio };
+    //
 }
-
 export async function getPortfolio() {
     return portfolio;
 }
