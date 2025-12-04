@@ -42,7 +42,6 @@ export default function ResultDisplay({ portfolio }: ResultDisplayProps) {
         // Volatility (average absolute change %)
         const vol = returns.reduce((sum, r) => sum + Math.abs(r), 0) / returns.length;
         setVolatility(vol);
-
         // Sharpe Ratio
         const sharpe = vol !== 0 ? avgReturn / vol : 0;
         setSharpeRatio(sharpe);
