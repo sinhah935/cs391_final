@@ -39,6 +39,10 @@ export default function BuildPortfolioPage() {
         setTimeout(() => setShowSuccessMessage(false), 3000);
     };
 
+    const handleDeleteStock = (symbol: string) => {
+        setAddedStocks((prev) => prev.filter((stock) => stock.symbol !== symbol));
+    };
+
     return (
         <div className="min-h-screen bg-gradient-to-b from-[#F5E9E5] to-[#452829]">
 
@@ -66,7 +70,7 @@ export default function BuildPortfolioPage() {
                 {addedStocks.length > 0 && (
                     <div className="max-w-2xl mx-auto mt-8">
                         <h3 className="text-xl font-semibold mb-4 text-[#F3E8DF]">
-                            Recently Added ({addedStocks.length})
+                            Your Portfolio Stocks ({addedStocks.length})
                         </h3>
                         <div className="space-y-2">
                             {addedStocks.map((stock, index) => (
@@ -99,7 +103,7 @@ export default function BuildPortfolioPage() {
                         {/*>*/}
                         {/*    View Full Portfolio*/}
                         {/*</button>*/}
-                        <PortfolioDisplay inputs={addedStocks} />
+                        <PortfolioDisplay inputs={addedStocks} onDelete={handleDeleteStock} />
                     </div>
                 )}
             </div>

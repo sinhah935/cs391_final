@@ -18,10 +18,11 @@ type StockData = {
 
 type PortfolioDisplayProps = {
     inputs: StockData[];
+    onDelete: (symbol: string) => void;
 };
 
 // Takes in an array of Stock Info and will display by calling Stock card whilst mapping to every stock
-export default function PostsDisplay({ inputs }: PortfolioDisplayProps) {
+export default function PostsDisplay({ inputs, onDelete }: PortfolioDisplayProps) {
     const [stocks, setStocks] = useState<StockData[]>([]); //Change to <StockCard>[]
     const router = useRouter();
     useEffect(() => {
@@ -35,7 +36,7 @@ export default function PostsDisplay({ inputs }: PortfolioDisplayProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 w-full px-4">
                 {/*Each stock card should have its own button, this function will display the stock cards. May add drop down button to dynamically show*/}
                 {stocks.map((p) => (
-                    <StockCard key={p.symbol} stock={p} />
+                    <StockCard key={p.symbol} stock={p} onDelete={onDelete}/>
                 ))}
             </div>
 
