@@ -199,55 +199,38 @@ export default function ResultDisplay() {
                         </div>
                     </div>
 
-                    {/* Diversification Score Gauge */}
+                    {/* Top 5 Stocks by Value */}
                     <div className="bg-white rounded-lg shadow-md p-6">
-                        <p className="text-sm text-gray-600 mb-4">Diversification Score</p>
+                        <p className="text-sm text-gray-600 mb-4">Top 5 Holdings by Value</p>
 
-                        {/* Circular progress gauge */}
-                        <div className="relative w-48 h-48 mx-auto mb-4">
-                            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 200 200">
-                                {/* Background circle */}
-                                <circle
-                                    cx="100"
-                                    cy="100"
-                                    r="80"
-                                    fill="none"
-                                    stroke="#e5e7eb"
-                                    strokeWidth="20"
-                                />
-
-                                {/* Progress circle */}
-                                <circle
-                                    cx="100"
-                                    cy="100"
-                                    r="80"
-                                    fill="none"
-                                    stroke={
-                                        diversificationScore < 30
-                                            ? "#ef4444"
-                                            : diversificationScore < 60
-                                                ? "#f59e0b"
-                                                : "#10b981"
-                                    }
-                                    strokeWidth="20"
-                                    strokeDasharray={`${(diversificationScore / 100) * 502.65} 502.65`}
-                                    strokeLinecap="round"
-                                />
-                            </svg>
-
-                            {/* Center text */}
-                            <div className="absolute inset-0 flex flex-col items-center justify-center">
-                                <p className="text-4xl font-bold text-[#452829]">
-                                    {diversificationScore.toFixed(0)}
-                                </p>
-                                <p className="text-sm text-gray-500">out of 100</p>
-                            </div>
-                        </div>
-
-                        <div className="text-center">
-                            <p className="text-sm font-semibold text-gray-700">
-                                {diversificationScore < 30 ? "Poor Diversification" : diversificationScore < 60 ? "Moderate Diversification" : "Good Diversification"}
-                            </p>
+                        <div className="space-y-3">
+                            {portfolio
+                                .map((stock) => ({
+                                    ...stock,
+                                    numPrice: parseFloat(stock.price),
+                                }))
+                                .sort((a, b) => b.numPrice - a.numPrice)
+                                .slice(0, 5)
+                                .map((stock, index) => (
+                                    <div key={stock.symbol} className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <span className="text-lg font-bold text-[#452829] w-6">
+                                                {index + 1}.
+                                            </span>
+                                            <div>
+                                                <p className="font-semibold text-[#452829]">
+                                                    {stock.symbol}
+                                                </p>
+                                                <p className="text-xs text-gray-500">
+                                                    {((stock.numPrice / totalValue) * 100).toFixed(1)}% of portfolio
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <p className="text-lg font-bold text-[#452829]">
+                                            ${stock.numPrice.toFixed(2)}
+                                        </p>
+                                    </div>
+                                ))}
                         </div>
                     </div>
                 </div>
