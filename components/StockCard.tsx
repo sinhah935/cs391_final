@@ -1,11 +1,7 @@
 import React from "react";
-import type {GlobalQuoteResponse} from "@/types/StocksTypes";
 
-// type StockCardProps = {
-//     quote: GlobalQuoteResponse["Global Quote"];
-//     onDelete: (symbol: string) => void;
-// };
-
+// DONE BY ESHA WADHER
+// BU ID: U41888146
 type StockData = {
     symbol: string;
     price: string;
