@@ -27,7 +27,6 @@ export async function addStockToPortfolio(stock: StockData) {
 export async function getPortfolio() {
     return portfolio;
 }
-
 export async function removeStockFromPortfolio(symbol: string) {
     portfolio = portfolio.filter((stock) => stock.symbol !== symbol);
     return { success: true, portfolio };
