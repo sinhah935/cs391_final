@@ -6,16 +6,7 @@ export default function Nav() {
         <nav className="flex gap-6 text-lg font-semibold text-[#452829]">
             <a href="/" className="hover:underline">Home</a>
             <a href="/portfolio" className="hover:underline">Portfolio</a>
-            <a href="/about" className="hover:underline"> About Us</a>
-            {/*<ul>*/}
-            {/*    <li><Link href="/">*/}
-            {/*        Home*/}
-            {/*    </Link></li>*/}
-
-            {/*    <li><Link href="/portfolio">*/}
-            {/*        Portfolio*/}
-            {/*    </Link></li>*/}
-            {/*</ul>*/}
+            <a href="/results" className="hover:underline"> Results</a>
         </nav>
     );
 }
