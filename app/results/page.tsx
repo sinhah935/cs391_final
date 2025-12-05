@@ -1,7 +1,6 @@
 "use client";
-
+//Annika Manjunath U05916630
 import { useEffect, useState } from "react";
-import { getPortfolio } from "@/types/Addstock";
 import ResultDisplay from "@/components/ResultDisplay";
 
 type StockData = {
@@ -18,20 +17,23 @@ export default function ResultsPage() {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        loadPortfolio();
+        // Load portfolio from localStorage
+        const saved = localStorage.getItem("portfolioStocks");
+        if (saved) {
+            try {
+                const stocks = JSON.parse(saved);
+                setPortfolio(stocks);
+            } catch (error) {
+                console.error("Failed to load portfolio:", error);
+                setPortfolio([]);
+            }
+        } else {
+            setPortfolio([]);
+        }
+        setIsLoading(false);
     }, []);
 
-    const loadPortfolio = async () => {
-        try {
-            const data = await getPortfolio();
-            setPortfolio(data);
-        } catch (error) {
-            console.error("Error loading portfolio:", error);
-        } finally {
-            setIsLoading(false);
-        }
-    };
-
+    // is this necessary to include?
     if (isLoading) {
         return (
             <div className="min-h-screen bg-gradient-to-b from-[#F5E9E5] to-[#452829] flex items-center justify-center">

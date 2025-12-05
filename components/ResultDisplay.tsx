@@ -1,5 +1,5 @@
 "use client";
-
+//ANnika Manjunath U05916630
 import { useEffect, useState } from "react";
 
 type StockData = {
@@ -11,46 +11,18 @@ type StockData = {
     lastTradingDay: string;
 };
 
-export default function ResultDisplay() {
-    const [portfolio, setPortfolio] = useState<StockData[]>([]);
+type ResultDisplayProps = {
+    portfolio: StockData[];
+};
+
+export default function ResultDisplay({ portfolio }: ResultDisplayProps) {
     const [totalValue, setTotalValue] = useState(0);
     const [totalReturn, setTotalReturn] = useState(0);
     const [volatility, setVolatility] = useState(0);
     const [sharpeRatio, setSharpeRatio] = useState(0);
-    const [diversificationScore, setDiversificationScore] = useState(0);
     const [maxDrawdown, setMaxDrawdown] = useState(0);
+    const [maxDrawdownStock, setMaxDrawdownStock] = useState("");  // ← Add this
 
-    // Load portfolio from localStorage on mount and set up listener
-    useEffect(() => {
-        const loadPortfolio = () => {
-            const saved = localStorage.getItem("portfolioStocks");
-            if (saved) {
-                try {
-                    const stocks = JSON.parse(saved);
-                    setPortfolio(stocks);
-                } catch {
-                    console.error("Failed to load portfolio stocks");
-                    setPortfolio([]);
-                }
-            } else {
-                setPortfolio([]);
-            }
-        };
-
-        // Load initially
-        loadPortfolio();
-
-        // Listen for storage changes (in case updated from another tab)
-        window.addEventListener("storage", loadPortfolio);
-
-        // Set up interval to check for changes (for same-tab updates)
-        const interval = setInterval(loadPortfolio, 500);
-
-        return () => {
-            window.removeEventListener("storage", loadPortfolio);
-            clearInterval(interval);
-        };
-    }, []);
 
     useEffect(() => {
         if (portfolio.length > 0) {
@@ -71,20 +43,35 @@ export default function ResultDisplay() {
         // Volatility (average absolute change %)
         const vol = returns.reduce((sum, r) => sum + Math.abs(r), 0) / returns.length;
         setVolatility(vol);
+
         // Sharpe Ratio
         const sharpe = vol !== 0 ? avgReturn / vol : 0;
         setSharpeRatio(sharpe);
 
-        // Diversification Score
-        const numStocks = portfolio.length;
-        const prices = portfolio.map(s => parseFloat(s.price));
-        const largestPosition = Math.max(...prices) / value;
-        const divScore = (numStocks / 20) * 50 + (1 - largestPosition) * 50;
-        setDiversificationScore(Math.min(100, divScore));
 
         // Max Drawdown
-        const changes = portfolio.map(s => parseFloat(s.change));
-        setMaxDrawdown(Math.min(...changes, 0));
+        // Max Drawdown - find the worst performing stock
+        const changes = portfolio.map(s => ({
+            symbol: s.symbol,
+            change: parseFloat(s.change)
+        }));
+        const worstStock = changes.reduce((worst, current) =>
+            current.change < worst.change ? current : worst
+        );
+        setMaxDrawdown(Math.min(worstStock.change, 0));
+        setMaxDrawdownStock(worstStock.symbol);  // ← Store the stock symbol
+    };
+
+    const getVolatilityColor = () => {
+        if (volatility < 5) return "bg-green-500";
+        if (volatility < 15) return "bg-yellow-500";
+        return "bg-red-500";
+    };
+
+    const getVolatilityText = () => {
+        if (volatility < 5) return "Low Risk - Stable";
+        if (volatility < 15) return "Moderate Risk";
+        return "High Risk - Volatile";
     };
 
     if (portfolio.length === 0) {
@@ -142,60 +129,41 @@ export default function ResultDisplay() {
                     </div>
                 </div>
 
-                {/* Risk Metrics with Gauges */}
+                {/* Volatility and Top Holdings Row */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                    {/* Volatility Gauge */}
+                    {/* Volatility Risk Display */}
                     <div className="bg-white rounded-lg shadow-md p-6">
-                        <p className="text-sm text-gray-600 mb-4">Volatility Risk Gauge</p>
+                        <p className="text-sm text-gray-600 mb-4">Portfolio Volatility</p>
 
-                        {/* Semi-circle gauge */}
-                        <div className="relative w-48 h-24 mx-auto mb-4">
-                            {/* Background arc */}
-                            <svg className="w-full h-full" viewBox="0 0 200 100">
-                                {/* Green zone (0-30) */}
-                                <path
-                                    d="M 20 90 A 80 80 0 0 1 73.43 23.43"
-                                    fill="none"
-                                    stroke="#10b981"
-                                    strokeWidth="20"
-                                />
-                                {/* Yellow zone (30-60) */}
-                                <path
-                                    d="M 73.43 23.43 A 80 80 0 0 1 126.57 23.43"
-                                    fill="none"
-                                    stroke="#f59e0b"
-                                    strokeWidth="20"
-                                />
-                                {/* Red zone (60-100) */}
-                                <path
-                                    d="M 126.57 23.43 A 80 80 0 0 1 180 90"
-                                    fill="none"
-                                    stroke="#ef4444"
-                                    strokeWidth="20"
-                                />
-
-                                {/* Needle */}
-                                <line
-                                    x1="100"
-                                    y1="90"
-                                    x2={100 + 70 * Math.cos((Math.PI * (1 - Math.min(volatility / 30, 1))))}
-                                    y2={90 - 70 * Math.sin((Math.PI * (1 - Math.min(volatility / 30, 1))))}
-                                    stroke="#452829"
-                                    strokeWidth="3"
-                                    strokeLinecap="round"
-                                />
-                                {/* Center dot */}
-                                <circle cx="100" cy="90" r="5" fill="#452829" />
-                            </svg>
-                        </div>
-
-                        <div className="text-center">
-                            <p className="text-3xl font-bold text-[#452829] mb-1">
+                        <div className="text-center mb-4">
+                            <p className="text-5xl font-bold text-[#452829] mb-2">
                                 {volatility.toFixed(1)}%
                             </p>
-                            <p className="text-sm text-gray-500">
-                                {volatility < 5 ? "Low Risk - Stable" : volatility < 15 ? "Moderate Risk" : "High Risk - Risky"}
+                            <p className={`text-lg font-semibold ${
+                                volatility < 5 ? "text-green-600" : volatility < 15 ? "text-yellow-600" : "text-red-600"
+                            }`}>
+                                {getVolatilityText()}
                             </p>
+                        </div>
+
+                        {/* Visual Progress Bar */}
+                        <div className="w-full">
+                            <div className="flex justify-between text-xs text-gray-500 mb-2">
+                                <span>Low</span>
+                                <span>Moderate</span>
+                                <span>High</span>
+                            </div>
+                            <div className="w-full bg-gray-200 rounded-full h-6 overflow-hidden">
+                                <div
+                                    className={`h-6 rounded-full transition-all duration-500 ${getVolatilityColor()}`}
+                                    style={{ width: `${Math.min((volatility / 30) * 100, 100)}%` }}
+                                />
+                            </div>
+                            <div className="flex justify-between text-xs text-gray-400 mt-1">
+                                <span>0%</span>
+                                <span>15%</span>
+                                <span>30%+</span>
+                            </div>
                         </div>
                     </div>
 
@@ -243,9 +211,16 @@ export default function ResultDisplay() {
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="flex justify-between p-3 bg-gray-50 rounded">
                             <span className="text-gray-600">Max Drawdown</span>
-                            <span className="font-semibold text-red-600">
-                                ${maxDrawdown.toFixed(2)}
-                            </span>
+                            <div className="text-right">
+                                <span className="font-semibold text-red-600">
+                                    ${maxDrawdown.toFixed(2)}
+                                </span>
+                                {maxDrawdownStock && (
+                                    <span className="text-xs text-gray-500 ml-2">
+                                        ({maxDrawdownStock})
+                                    </span>
+                                )}
+                            </div>
                         </div>
                         <div className="flex justify-between p-3 bg-gray-50 rounded">
                             <span className="text-gray-600">Number of Stocks</span>
